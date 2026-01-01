@@ -41,14 +41,12 @@ const userSchema = new mongoose.Schema({
 },
 {timestamps: true})
 // password hashing
-// userSchema.pre("save", async function(next){
-//     this.password = await bcrypt.hash(this.password, 10);
-//     if (!this.isModified("password")){
-//       return  next();
-//     }
-// } )
-
-
+userSchema.pre("save", async function(next){
+    this.password = await bcrypt.hash(this.password, 10);
+    if (!this.isModified("password")){
+      return  next();
+    }
+} );
 // userSchema.pre("save", async function (next) {
 //   if (!this.isModified("password")) {
 //       return next();
@@ -59,16 +57,16 @@ const userSchema = new mongoose.Schema({
 // });
 
 // JWT token
-// userSchema.methods.getJWTToken = function(){
-//     return jwt.sign({id: this._id}, process.env.JWT_SECRET,{
-//         expiresIn: process.env.JWT_EXPIRE,
-//     }
-//     )
-// }
+userSchema.methods.getJWTToken = function(){
+    return jwt.sign({id: this._id}, process.env.JWT_SECRET,{
+        expiresIn: process.env.JWT_EXPIRE,
+    }
+    )
+} 
 
 // Compare password
-// userSchema.methods.verifyPassword = async function(userEnteredPassword){
-//     return await bcrypt.compare(String(userEnteredPassword), this.password);
-// }
+userSchema.methods.verifyPassword = async function(userEnteredPassword){
+    return await bcrypt.compare(String(userEnteredPassword), this.password);
+}
 
 export default mongoose.model("User", userSchema);
