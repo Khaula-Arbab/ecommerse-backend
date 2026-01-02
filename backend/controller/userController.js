@@ -102,8 +102,7 @@ export const requestPasswordReset = handleAsync(
 //  Reset Password
 export const resetPassword = handleAsync(
   async(req, res, next) => {
-    console.log("BODY:", req.body);
-    console.log("PARAMS:", req.params.token); // Debugging line to check request body
+  
     const resetPasswordToken = crypto.createHash("sha256").update(req.params.token).digest("hex");
     console.log(req.params.token);
     const user = await User.findOne({
@@ -122,5 +121,55 @@ export const resetPassword = handleAsync(
     user.resetPasswordExpire = undefined;
     await user.save();
     sendToken(user, 200, res);
+  }
+)
+
+// Get User Details
+export const getUserDetails = handleAsync(
+  async(req, res, next) => {
+    const user = await User.findById(req.user.id);
+    res.status(200).json({
+      success: true,
+      user,
+    })
+  }
+)
+
+// Update User Password
+
+export const updatePassword = handleAsync(
+  async(req, res, next) => {
+    const {oldPassword, newPassword, confirmPassword} = req.body;
+    const user = await User.findById(req.user.id).select("+password");
+    const checkPasswordMatch = await user.verifyPassword(oldPassword);
+    if(!checkPasswordMatch){
+      return next(new HandleError("Old password is incorrect", 400));
+    }
+    if(newPassword !== confirmPassword){
+      return next(new HandleError("Password does not match", 400));
+    }
+    user.password = newPassword;
+    await user.save();
+    sendToken(user, 200, res);
+  }
+)
+
+// Update User Profile
+export const updateUserProfile = handleAsync(
+  async(req, res, next) => {
+    const {name, email} = req.body;
+    const updateUserData = {
+      name,
+      email,
+    }
+    const user = await User.findByIdAndUpdate(req.user.id, updateUserData, {
+              new: true,
+              runValidators: true,
+    });
+    res.status(200).json({
+      success: true,
+      message: "Profile Updated Successfully",
+      user,
+    })
   }
 )
