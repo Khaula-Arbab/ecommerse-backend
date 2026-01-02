@@ -7,6 +7,9 @@ const app = express();
 
 // Middlewares
 app.use(express.json());
+app.use(express.json()); // parse JSON bodies
+ // parse form-urlencoded bodies
+
 app.use(cookieParser());
 
 // Routes
