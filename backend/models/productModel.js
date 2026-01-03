@@ -43,17 +43,17 @@ const productSchema = new mongoose.Schema({
           maxLength:[5, "Stock cannot exceed 5 characters"],
           default: 1,
      },
-     numofReviews:{
+     numOfReviews:{
           type: Number,
           default:0,
      },
      reviews:[
           {
-               // user:{
-               //      type: mongoose.Schema.Types.ObjectId,
-               //      ref: "User",
-               //      required: true,
-               // },
+               user:{
+                    type: mongoose.Schema.ObjectId,
+                    ref: "User",
+                    required: true,
+               },
                name:{
                     type: String,
                     required: true,
