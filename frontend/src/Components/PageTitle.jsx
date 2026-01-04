@@ -1,7 +1,7 @@
-import React, { use } from "react";
+import React from "react";
 
 function PageTitle({ title }) {
-   useEffect(()=>{
+   React.useEffect(()=>{
     document.title = title;
    },[title])
 

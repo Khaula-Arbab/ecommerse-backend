@@ -5,13 +5,30 @@ import Navbar from '../Components/Navbar.jsx';
 import ImageSlider from '../Components/imageSlider.jsx';
 import Product from '../Components/Product.jsx';
 import PageTitle from '../Components/PageTitle.jsx';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProduct, removeErrors } from '../Features/Products/productSlice.js';
+import Loader from '../Components/Loader.jsx';
+import { toast } from 'react-toastify';
 
 function Home(){
-  const products=[
-    1,2,3,4,5,6,7,8,9,10
-  ]
+    const {loading, error, products, productCount }  =useSelector(state => state.product);
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(getProduct());
+  },[dispatch]);
+
+  React.useEffect(()=>{
+     if(error){
+        toast.error(error.message, {position: 'top-center', autoClose:3000});
+        dispatch(removeErrors());
+     }
+  },[dispatch, error]);
+
   return(
     <>
+   {loading? (<Loader />) : (<>
+   
     <PageTitle  title="Home-NovaMart"/>
     <Navbar />
     <ImageSlider />
@@ -25,7 +42,9 @@ function Home(){
        </div>
     </div>
     <Footer />
-    </>
+    </> )
+}
+</>
   )
 }
 export default Home;
