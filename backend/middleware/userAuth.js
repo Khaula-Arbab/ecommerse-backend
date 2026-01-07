@@ -17,6 +17,7 @@ export const verifyUserAuth = handleAsync(async(req, res, next) => {
 // user Authorization
 export const roleBasedAuth = (...roles) => {
     return(req, res, next) => {
+        console.log(req.user.role)
         if(!roles.includes(req.user.role)){
             return next(new HandleError(`Role - ${req.user.role} is not allowed to access this resource`, 403));
         }

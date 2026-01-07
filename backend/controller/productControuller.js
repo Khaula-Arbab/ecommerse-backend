@@ -3,18 +3,82 @@ import HandleError from "../utils/handleError.js";
 import handleAsync from "../middleware/handleAsync.js";
 import APIFunctionality from "../utils/apiFunctionality.js";
 
-// Create Product -- Admin
+
+
+import { v2 as cloudinary } from "cloudinary";
+
+
 export const createProducts = handleAsync(
-    async(req, res, next) => {
-        req.body.user = req.user.id;
-       
-        const product =  await Product.create(req.body);
-        res.status(201).json({
-            success: true,
-            product,
-        })
+  async (req, res, next) => {
+
+    // Attach admin/user who is creating the product
+    req.body.user = req.user.id;
+
+    // 🔴 STEP 1: Prepare images array
+    let images = [];
+
+    // 🔴 STEP 2: Handle single OR multiple images
+    if (req.files && req.files.images) {
+      if (Array.isArray(req.files.images)) {
+        images = req.files.images;
+      } else {
+        images = [req.files.images];
+      }
     }
-) 
+
+    // 🔴 STEP 3: Upload images to Cloudinary
+    const imagesLinks = [];
+
+    for (let i = 0; i < images.length; i++) {
+      const result = await cloudinary.uploader.upload(
+        images[i].tempFilePath,
+        {
+          folder: "products",
+        }
+      );
+
+      imagesLinks.push({
+        public_id: result.public_id,
+        url: result.secure_url,
+      });
+    }
+
+    // 🔴 STEP 4: Attach images to request body
+    req.body.image = imagesLinks;
+
+    // 🔴 STEP 5: Create product in MongoDB
+    const product = await Product.create(req.body);
+
+    res.status(201).json({
+      success: true,
+      product,
+    });
+  }
+);
+
+
+
+
+
+
+
+
+
+
+
+
+// Create Product -- Admin
+// export const createProducts = handleAsync(
+//     async(req, res, next) => {
+//         req.body.user = req.user.id;
+       
+//         const product =  await Product.create(req.body);
+//         res.status(201).json({
+//             success: true,
+//             product,
+//         })
+//     }
+// ) 
 
 // Get All Products
 export const getAllProducts = handleAsync(async(req, res, next) => {
@@ -94,6 +158,7 @@ export const getSingleProduct = handleAsync( async(req, res, next) => {
 
 // Get All Products for Admin
 export const getAdminProducts = handleAsync(async(req, res, next) => {
+ 
     const products = await Product.find();
     res.status(200).json({
         success: true,

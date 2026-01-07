@@ -9,6 +9,9 @@ import Login from './User/Login.jsx';
 import { useSelector, useDispatch } from 'react-redux';
 import { loadUser } from './Features-temp/user/userSlice.js';
 import UserDashboard from './User/UserDashboard.jsx';
+import Profile from './User/Profile.jsx';
+import ProtectedRoutes from './Components/ProtectedRoutes.jsx';
+import UpdateProfile from './User/UpdateProfile.jsx';
 
 function App(){
   const {isAuthenticated, user} = useSelector(state => state.user);
@@ -28,7 +31,8 @@ function App(){
         <Route path="/cart" element={<Cart />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-      
+        <Route path="/profile" element={<ProtectedRoutes  element={<Profile />}/>} />
+        <Route path="/profile/update" element={<ProtectedRoutes  element={<UpdateProfile />}/>} />
      </Routes>
      {isAuthenticated && <UserDashboard  user={user}/>}
    </Router>

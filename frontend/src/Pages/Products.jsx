@@ -25,10 +25,10 @@ function Products(){
   const pageFormUrl = parseInt(searchParams.get('page'),10)||1;
   const [currentPage, setCurrentPage] = React.useState(pageFormUrl);
    const categories = [
-    { name: "Men's Wear", slug: "mens-wear" },
-    { name: "Women's Wear", slug: "womens-wear" },
+    { name: "Men's Wear", slug: "menswear" },
+    { name: "Women's Wear", slug: "womenwear" },
     { name: "Footwear", slug: "footwear" },
-    { name: "Winter Collection", slug: "winter" },
+    { name: "Makeup", slug: "mackup" },
     { name: "Activewear", slug: "activewear" },
     { name: "Accessories", slug: "accessories" },
   ];

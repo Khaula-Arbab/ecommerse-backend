@@ -180,24 +180,75 @@ export const updatePassword = handleAsync(
 )
 
 // Update User Profile
+// export const updateUserProfile = handleAsync(
+//   async(req, res, next) => {
+//     const {name, email} = req.body;
+//     const updateUserData = {
+//       name,
+//       email,
+//     }
+//     const user = await User.findByIdAndUpdate(req.user.id, updateUserData, {
+//               new: true,
+//               runValidators: true,
+//     });
+//     res.status(200).json({
+//       success: true,
+//       message: "Profile Updated Successfully",
+//       user,
+//     })
+//   }
+// )
+
+
 export const updateUserProfile = handleAsync(
-  async(req, res, next) => {
-    const {name, email} = req.body;
-    const updateUserData = {
-      name,
-      email,
+  async (req, res, next) => {
+    const newUserData = {
+      name: req.body.name,
+      email: req.body.email,
+    };
+
+    // If avatar is being updated
+    if (req.files && req.files.avatar) {
+      const user = await User.findById(req.user.id);
+
+      // Delete old avatar from Cloudinary
+      if (user.avatar?.public_id) {
+        await cloudinary.uploader.destroy(user.avatar.public_id);
+      }
+
+      // Upload new avatar
+      const result = await cloudinary.uploader.upload(
+        req.files.avatar.tempFilePath,
+        {
+          folder: "avatars",
+          width: 150,
+          crop: "scale",
+        }
+      );
+
+      newUserData.avatar = {
+        public_id: result.public_id,
+        url: result.secure_url,
+      };
     }
-    const user = await User.findByIdAndUpdate(req.user.id, updateUserData, {
-              new: true,
-              runValidators: true,
-    });
+
+    const user = await User.findByIdAndUpdate(
+      req.user.id,
+      newUserData,
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
+
     res.status(200).json({
       success: true,
       message: "Profile Updated Successfully",
       user,
-    })
+    });
   }
-)
+);
+
 
 // Get All Users -- Admin
 export const getAllUsersList = handleAsync(

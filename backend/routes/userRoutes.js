@@ -12,7 +12,7 @@ router.route("/password/forgot").post(requestPasswordReset);
 router.route("/reset/:token").post(resetPassword);
 router.route('/profile').get(verifyUserAuth, getUserDetails);
 router.route('/password/update').post(verifyUserAuth, updatePassword);
-router.route('/profile/update').post(verifyUserAuth, updateUserProfile);
+router.route('/profile/update').put(verifyUserAuth, updateUserProfile);
 router.route('/admin/users').get(verifyUserAuth, roleBasedAuth("admin"),getAllUsersList);
 router.route('/admin/user/:id').get(verifyUserAuth, roleBasedAuth("admin"),getSingleUserDetails)
 .put(verifyUserAuth, roleBasedAuth("admin"), updateUserRole)
