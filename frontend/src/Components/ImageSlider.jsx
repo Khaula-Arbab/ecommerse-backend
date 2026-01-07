@@ -4,8 +4,8 @@ import {useState, useEffect} from "react"
 function ImageSlider(){
   const images = [
     "./images/banner1.jpg",
-    "./images/banner1.jpg",
-    "./images/banner1.jpg"  
+    "./images/banner2.jpeg",
+    "./images/banner3.jpeg"  
   ]
   const [currentIndex, setCurrentIndex] = useState(0);
   useEffect(()=>{

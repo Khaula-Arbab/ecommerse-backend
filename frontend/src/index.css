@@ -1,6 +1,6 @@
 :root { 
     
-    --primary-main: #6C5B7B; 
+    /* --primary-main: #6C5B7B; 
     --primary-dark: #4E4A59; 
     --primary-light: #F8B5B1; 
     
@@ -12,8 +12,28 @@
     --text-light: #FFFFFF; 
     
     --border-color: #5C4A6F; 
+     */
     
 
+    
+        /* Primary Brand Colors (Camel / Brown Theme) */
+        --primary-main: #C2A27C;   /* Camel brown (main brand color) */
+        --primary-dark: #6B4F3F;   /* Dark brown (CTA buttons, strong text) */
+        --primary-light: #E6D3B1;  /* Soft beige (highlights, cards, hover bg) */
+      
+        /* Background Colors */
+        --bg-primary: #F5EFE6;     /* Light beige background */
+        --bg-secondary: #EADFCF;   /* Slightly darker beige sections */
+      
+        /* Text Colors */
+        --text-primary: #3E2C22;   /* Deep brown text */
+        --text-secondary: #7A5C48; /* Muted brown text */
+        --text-light: #FFFFFF;    /* White (on dark buttons) */
+      
+        /* Borders / Dividers */
+        --border-color: #D2BFA3;   /* Soft camel border */
+      
+      
     --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2); 
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.15); 
 }

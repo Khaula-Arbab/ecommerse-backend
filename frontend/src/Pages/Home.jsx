@@ -6,7 +6,7 @@ import ImageSlider from '../Components/imageSlider.jsx';
 import Product from '../Components/Product.jsx';
 import PageTitle from '../Components/PageTitle.jsx';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProduct, removeErrors } from '../Features/Products/productSlice.js';
+import { getProduct, removeErrors } from '../Features-temp/Products/productSlice.js';
 import Loader from '../Components/Loader.jsx';
 import { toast } from 'react-toastify';
 
@@ -15,7 +15,7 @@ function Home(){
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    dispatch(getProduct());
+    dispatch(getProduct({keyword:""}));
   },[dispatch]);
 
   React.useEffect(()=>{

@@ -4,12 +4,24 @@ import user from "./routes/userRoutes.js";
 import errorHandleMiddleware from './middleware/error.js';
 import order from './routes/orderRoutes.js';
 import cookieParser from 'cookie-parser';
+import fileUpload from 'express-fileupload';
+
+
 const app = express();
 
 // Middlewares
 app.use(express.json());
-app.use(express.json()); // parse JSON bodies
+app.use(express.json()); 
+app.use(fileUpload({
+  useTempFiles: true,
+  tempFileDir: "/tmp/",
+}));
+
+// parse JSON bodies
  // parse form-urlencoded bodies
+ app.use(express.urlencoded({ extended: true }));
+
+
 
 app.use(cookieParser());
 

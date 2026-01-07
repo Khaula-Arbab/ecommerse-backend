@@ -1,9 +1,17 @@
 import {createSlice, createAsyncThunk} from '@reduxjs/toolkit';
 import axios from 'axios';
 
-export const getProduct = createAsyncThunk('product/getProduct', async(_, {rejectWithValue}) => {
+
+export const getProduct = createAsyncThunk('product/getProduct', async({keyword, page=1, category}, {rejectWithValue}) => {
    try{
-      const link = `/api/v1/products`;
+
+      let link = '/api/v1/products?page='+page;
+      if(category){
+         link += `&category=${category}`
+      }
+     if(keyword){
+        link += `&keyword=${keyword}`
+     }
       const {data} = await axios.get(link);
       return data;
    }catch(error){
@@ -27,7 +35,10 @@ const productSlice = createSlice({
       productCount:0,
       loading:false,
       error:null,
-      product:null
+      product:null,
+      resPerPage:3,
+      totalPages:0
+
    },
    reducers:{
     removeErrors:(state) => {
@@ -44,10 +55,13 @@ const productSlice = createSlice({
          state.products = action.payload.products;
          state.productCount = action.payload.productCount;
          state.error = null;
+         state.resPerPage = action.payload.resPerPage;
+         state.totalPages = action.payload.totalPages
       });
       builder.addCase(getProduct.rejected, (state, action) => {
          state.loading = false;
          state.error = action.payload || "Failed to fetch products";
+         state.products = [];
       });
 
 

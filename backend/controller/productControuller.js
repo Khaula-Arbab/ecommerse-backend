@@ -18,7 +18,7 @@ export const createProducts = handleAsync(
 
 // Get All Products
 export const getAllProducts = handleAsync(async(req, res, next) => {
-    const resPerPage = 4;
+    const resPerPage = 3;
     const apiFeatures = new APIFunctionality(Product.find(), req.query)
     .search()
     .filter()

@@ -4,22 +4,47 @@ import User from "../models/userModel.js";
  import { sendToken } from "../utils/jwtToken.js";
  import {sendEmail} from "../utils/sendEmail.js";
 import crypto from "crypto";
+import {v2 as cloudinary} from "cloudinary";
 
 
 // Register a user
 export const registerUser = handleAsync(
   async(req, res, next) => {
-     const {name, email, password} = req.body;
+    const {name, email, password} = req.body;
+    if (!req.files || !req.files.avatar) {
+      return next(new HandleError("Avatar file is required", 400));
+    }
+    
+    const avatar = req.files.avatar;
+  
+     const myCloud = await cloudinary.uploader.upload(
+      avatar.tempFilePath,
+      {
+        folder: "avatars",
+        width: 150,
+        crop: "scale",
+      }
+    );
+    
+
+    if (!name || !email || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "All fields are required"
+      });
+    }
+    
+   
      const user = await User.create({
         name,
         email,
         password,
         avatar:{
-            public_id: "this is a sample id",
-            url: "profilepicurl",
+            public_id: myCloud.public_id,
+            url: myCloud.secure_url,
         },
-      
      })
+     
   
        sendToken(user, 201, res);
       
